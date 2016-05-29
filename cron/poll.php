@@ -94,4 +94,3 @@ mysqli_close($c);
 * * * * * /usr/bin/php /home/pi/pins/poll.php >> /home/pi/pins/poll_output 2> /home/pi/pins/poll_errors
 */
 ?>
-
