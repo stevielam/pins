@@ -2,6 +2,7 @@
 set -e
 
 PASSWORD=test
+TIMEZONE="America/Los_Angeles"
 #TODO: ask for MySQL / phpmyadmin password and update variable
 
 
@@ -9,21 +10,27 @@ PASSWORD=test
 (sudo apt-get update && sudo apt-get -y upgrade) || (echo "Upgrade Failed. Aborting..." && exit 1)  
 
 #set the timezone
-sudo echo "America/Los_Angeles" > sudo /etc/timezone
+sudo echo $TIMEZONE > sudo /etc/timezone
 
 #install git
 sudo apt-get install -y git-core || (echo "Git Install Failed. Aborting..." && exit 1)
 
 #clone wiringPi
 #check if it exists before you clone, if it does then git pull origin instead of cloning
-if [ ! -d ~/wiringPi ] 
-then
-	git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
-else
-	cd wiringPi
-	git pull origin || (echo "WiringPi Pull Failed. Aborting..." && exit 1)
-	cd ~
-fi	
+#if [ ! -d ~/wiringPi ] then
+	#git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
+#else
+	#cd wiringPi
+	#git pull origin || (echo "WiringPi Pull Failed. Aborting..." && exit 1)
+	#cd ~
+#fi	
+
+if [ -d ~/wiringPi ] then
+	echo "wiringPi exists. Deleting..."
+	sudo rm -rf ~/wiringPi	
+fi
+
+git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
 
 #build wiringPi
 cd wiringPi
