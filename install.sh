@@ -29,16 +29,16 @@ sudo chmod g+s -R /var/www/ || (echo "Setting Permissions Failed. Aborting..." &
 sudo usermod -a -G www-data pi || (echo "Adding pi to www-data Failed. Aborting..." && exit 1)
 
 #installing mysql
-echo 'mysql-server mysql-server/root_password password $PASSWORD' | debconf-set-selections
-echo 'mysql-server mysql-server/root_password_again password $PASSWORD' | debconf-set-selections
+sudo echo 'mysql-server mysql-server/root_password password $PASSWORD' | debconf-set-selections
+sudo echo 'mysql-server mysql-server/root_password_again password $PASSWORD' | debconf-set-selections
 sudo apt-get install -y mysql-server mysql-client || (echo "MySQL Install Failed. Aborting..." && exit 1)
 
 #install phpmyadmin
-echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | debconf-set-selections
-echo "phpmyadmin phpmyadmin/app-password-confirm password $PASSWORD" | debconf-set-selections
-echo "phpmyadmin phpmyadmin/mysql/admin-pass password $PASSWORD" | debconf-set-selections
-echo "phpmyadmin phpmyadmin/mysql/app-pass password $PASSWORD" | debconf-set-selections
-echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
+sudo echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | debconf-set-selections
+sudo echo "phpmyadmin phpmyadmin/app-password-confirm password $PASSWORD" | debconf-set-selections
+sudo echo "phpmyadmin phpmyadmin/mysql/admin-pass password $PASSWORD" | debconf-set-selections
+sudo echo "phpmyadmin phpmyadmin/mysql/app-pass password $PASSWORD" | debconf-set-selections
+sudo echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
 sudo apt-get install -y phpmyadmin || (echo "PHPMyAdmin Install Failed. Aborting..." && exit 1)
 
 #create database and tables
