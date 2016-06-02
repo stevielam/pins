@@ -6,16 +6,16 @@ TIMEZONE="America/Los_Angeles"
 
 
 echo 'Choose Password for MySQL root and PHPMyAdmin root: ' 
-read -s -p PASSWORD1
+read -s -p pw1
 
 echo 'Please repeat the password: ' 
-read -s -p PASSWORD2
+read -s -p pw2
 
 # Check both passwords match
-if [ $PASSWORD1 != $PASSWORD2 ]; then
+if [ $pw1 != $pw2 ]; then
     echo "Passwords do not match. Aborting" && exit 1    
 else
-    PASSWORD=PASSWORD1
+    PASSWORD=$pw1
 fi
 
 #TODO: ask for timezone
