@@ -8,8 +8,12 @@ PASSWORD=test
 TIMEZONE="America/Los_Angeles"
 
 read -s -p 'Choose Password for MySQL root and PHPMyAdmin root: ' pw1
- 
+
+printf "\n"
+
 read -s -p 'Please repeat the password: ' pw2
+
+printf "\n"
 
 # Check both passwords match
 if [ $pw1 != $pw2 ]; then
