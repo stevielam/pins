@@ -5,10 +5,10 @@ PASSWORD=test
 TIMEZONE="America/Los_Angeles"
 
 
-echo 'Choose Password for MySQL root and PHPMyAdmin root: ' 
+echo -n 'Choose Password for MySQL root and PHPMyAdmin root: ' 
 read -s -p pw1
 
-echo 'Please repeat the password: ' 
+echo -n 'Please repeat the password: ' 
 read -s -p pw2
 
 # Check both passwords match
