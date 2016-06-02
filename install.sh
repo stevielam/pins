@@ -16,8 +16,9 @@ sudo apt-get install -y git-core || (echo "Git Install Failed. Aborting..." && e
 
 #clone wiringPi
 #check if it exists before you clone, if it does then git pull origin instead of cloning
-if [ ! -d ~/wiringPi ] then
-	git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1)
+if [ ! -d ~/wiringPi ] 
+then
+	git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
 else
 	cd wiringPi
 	git clone origin || (echo "WiringPi Pull Failed. Aborting..." && exit 1
