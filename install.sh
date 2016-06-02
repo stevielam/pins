@@ -28,7 +28,7 @@ sudo apt-get install -y git-core || (echo "Git Install Failed. Aborting..." && e
 if [ -d ~/wiringPi ] 
 then 
 	sudo echo "wiringPi exists. Deleting..."
-	sudo rm -rf ~/wiringPi	|| (echo "WiringPi Delete Failed. Aborting..." && exit 1) 
+	sudo rm -R -f ~/wiringPi || (echo "WiringPi Delete Failed. Aborting..." && exit 1) 
 fi
 
 git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
