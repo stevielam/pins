@@ -1,13 +1,25 @@
 #!/bin/bash
 set -e
 
-PASSWORD=test
+#PASSWORD=test
 TIMEZONE="America/Los_Angeles"
+
 #TODO: ask for MySQL / phpmyadmin password and update variable
+while true
+do
+    read -s -p "Set Password for MySQL root and PHPMyAdmin root: " PASSWORD
+    echo
+    read -s -p "Password (again): " PASSWORD2
+    echo
+    [ "$PASSWORD" = "$PASSWORD2" ] && break
+    echo "Please try again"
+done
+
+#TODO: ask for timezone
 
 
 #update and upgrade
-#(sudo apt-get update && sudo apt-get -y upgrade) || (echo "Upgrade Failed. Aborting..." && exit 1)  
+(sudo apt-get update && sudo apt-get -y upgrade) || (echo "Upgrade Failed. Aborting..." && exit 1)  
 
 #set the timezone
 sudo echo $TIMEZONE > sudo /etc/timezone
@@ -27,7 +39,7 @@ git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Abortin
 
 #build wiringPi
 cd wiringPi
-sudo ./build ||  (echo "Building wiringPi Failed. Aborting..." && exit 1)
+#sudo ./build ||  (echo "Building wiringPi Failed. Aborting..." && exit 1)
 cd ~
 
 #installing Apache
