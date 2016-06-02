@@ -26,7 +26,7 @@ sudo apt-get install -y git-core || (echo "Git Install Failed. Aborting..." && e
 #fi	
 
 if [ -d ~/wiringPi ] then
-	echo "wiringPi exists. Deleting..."
+	sudo echo "wiringPi exists. Deleting..."
 	sudo rm -rf ~/wiringPi	
 fi
 
