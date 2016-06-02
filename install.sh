@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 PASSWORD=test
 #TODO: ask for MySQL / phpmyadmin password and update variable
@@ -14,7 +15,8 @@ echo "America/Los_Angeles" > /etc/timezone
 sudo apt-get install -y git-core || (echo "Git Install Failed. Aborting..." && exit 1)
 
 #clone wiringPi
-git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1)
+#todo: check if it exists before you clone
+git clone git://git.drogon.net/wiringPi #|| (echo "WiringPi Clone Failed. Aborting..." && exit 1)
 
 #build wiringPi
 cd wiringPi
