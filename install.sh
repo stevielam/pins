@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-#PASSWORD=test
+PASSWORD=test
 TIMEZONE="America/Los_Angeles"
 
 #TODO: ask for MySQL / phpmyadmin password and update variable
