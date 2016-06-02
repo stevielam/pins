@@ -15,22 +15,14 @@ sudo echo $TIMEZONE > sudo /etc/timezone
 #install git
 sudo apt-get install -y git-core || (echo "Git Install Failed. Aborting..." && exit 1)
 
-#clone wiringPi
-#check if it exists before you clone, if it does then git pull origin instead of cloning
-#if [ ! -d ~/wiringPi ] then
-	#git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
-#else
-	#cd wiringPi
-	#git pull origin || (echo "WiringPi Pull Failed. Aborting..." && exit 1)
-	#cd ~
-#fi	
-
+#check if wiringPi exists and delete it, TODO: pull instead of delete
 if [ -d ~/wiringPi ] 
 then 
 	sudo echo "wiringPi exists. Deleting..."
 	sudo rm -rf wiringPi || (echo "WiringPi Delete Failed. Aborting..." && exit 1) 
 fi
 
+#Install wiringPi
 git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
 
 #build wiringPi
@@ -60,6 +52,13 @@ sudo apt-get install -y phpmyadmin || (echo "PHPMyAdmin Install Failed. Aborting
 
 #create database and tables
 #TODO: create database and tables
+
+#check if pins exists and delete it, TODO: pull instead of delete
+if [ -d ~/pins ] 
+then 
+	sudo echo "pins exists. Deleting..."
+	sudo rm -rf pins || (echo "Pins Delete Failed. Aborting..." && exit 1) 
+fi
 
 #clone pins repo
 git clone https://github.com/stevielam/pins.git || (echo "Pins Clone Failed. Aborting..." && exit 1)
