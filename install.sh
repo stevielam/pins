@@ -9,7 +9,7 @@ PASSWORD=test
 (sudo apt-get update && sudo apt-get -y upgrade) || (echo "Upgrade Failed. Aborting..." && exit 1)  
 
 #set the timezone
-sudo echo "America/Los_Angeles" > /etc/timezone
+sudo echo "America/Los_Angeles" > sudo /etc/timezone
 
 #install git
 sudo apt-get install -y git-core || (echo "Git Install Failed. Aborting..." && exit 1)
