@@ -1,4 +1,4 @@
-# pins
+# pipins
 
 http://www.stevielam.com
 

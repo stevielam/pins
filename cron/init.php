@@ -13,7 +13,7 @@ for($i=0; $i<NUMBER_OF_RELAYS; $i++){
 
 /*
 #initializes ALL relays to false
-@reboot /usr/bin/php /home/pi/pins/init.php >> /home/pi/pins/init_ouput 2> /home/pi/pins/init_errors
+@reboot /usr/bin/php /home/pi/pins/cron/init.php >> /home/pi/pins/cron/init_output 2> /home/pi/pins/cron/init_errors
 */
 
 ?>

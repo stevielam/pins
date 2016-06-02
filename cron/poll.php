@@ -91,6 +91,6 @@ mysqli_close($c);
 
 /*
 #checks every minute to see if relay needs to be started from schedule
-* * * * * /usr/bin/php /home/pi/pins/poll.php >> /home/pi/pins/poll_output 2> /home/pi/pins/poll_errors
+* * * * * /usr/bin/php /home/pi/pins/cron/poll.php >> /home/pi/pins/cron/poll_output 2> /home/pi/pins/cron/poll_errors
 */
 ?>
