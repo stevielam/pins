@@ -7,7 +7,7 @@ TIMEZONE="America/Los_Angeles"
 
 
 #update and upgrade
-(sudo apt-get update && sudo apt-get -y upgrade) || (echo "Upgrade Failed. Aborting..." && exit 1)  
+#(sudo apt-get update && sudo apt-get -y upgrade) || (echo "Upgrade Failed. Aborting..." && exit 1)  
 
 #set the timezone
 sudo echo $TIMEZONE > sudo /etc/timezone
