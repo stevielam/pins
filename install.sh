@@ -9,14 +9,20 @@ PASSWORD=test
 (sudo apt-get update && sudo apt-get -y upgrade) || (echo "Upgrade Failed. Aborting..." && exit 1)  
 
 #set the timezone
-echo "America/Los_Angeles" > sudo /etc/timezone
+sudo echo "America/Los_Angeles" > /etc/timezone
 
 #install git
 sudo apt-get install -y git-core || (echo "Git Install Failed. Aborting..." && exit 1)
 
 #clone wiringPi
-#todo: check if it exists before you clone
-git clone git://git.drogon.net/wiringPi #|| (echo "WiringPi Clone Failed. Aborting..." && exit 1)
+#check if it exists before you clone, if it does then git pull origin instead of cloning
+if [ ! -d ~/wiringPi ] then
+	git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1)
+else
+	cd wiringPi
+	git clone origin || (echo "WiringPi Pull Failed. Aborting..." && exit 1
+	cd ~
+fi	
 
 #build wiringPi
 cd wiringPi
@@ -31,16 +37,16 @@ sudo chmod g+s -R /var/www/ || (echo "Setting Permissions Failed. Aborting..." &
 sudo usermod -a -G www-data pi || (echo "Adding pi to www-data Failed. Aborting..." && exit 1)
 
 #installing mysql
-sudo echo 'mysql-server mysql-server/root_password password $PASSWORD' | sudo debconf-set-selections
-sudo echo 'mysql-server mysql-server/root_password_again password $PASSWORD' | sudo debconf-set-selections
+echo "mysql-server mysql-server/root_password password $PASSWORD" | sudo debconf-set-selections
+echo "mysql-server mysql-server/root_password_again password $PASSWORD" | sudo debconf-set-selections
 sudo apt-get install -y mysql-server mysql-client || (echo "MySQL Install Failed. Aborting..." && exit 1)
 
 #install phpmyadmin
-sudo echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | sudo debconf-set-selections
-sudo echo "phpmyadmin phpmyadmin/app-password-confirm password $PASSWORD" | sudo debconf-set-selections
-sudo echo "phpmyadmin phpmyadmin/mysql/admin-pass password $PASSWORD" | sudo debconf-set-selections
-sudo echo "phpmyadmin phpmyadmin/mysql/app-pass password $PASSWORD" | sudo debconf-set-selections
-sudo echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | sudo debconf-set-selections
+echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | sudo debconf-set-selections
+echo "phpmyadmin phpmyadmin/app-password-confirm password $PASSWORD" | sudo debconf-set-selections
+echo "phpmyadmin phpmyadmin/mysql/admin-pass password $PASSWORD" | sudo debconf-set-selections
+echo "phpmyadmin phpmyadmin/mysql/app-pass password $PASSWORD" | sudo debconf-set-selections
+echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | sudo debconf-set-selections
 sudo apt-get install -y phpmyadmin || (echo "PHPMyAdmin Install Failed. Aborting..." && exit 1)
 
 #create database and tables
