@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+
 PASSWORD=test
 TIMEZONE="America/Los_Angeles"
 
