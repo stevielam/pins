@@ -29,8 +29,8 @@ sudo chmod g+s -R /var/www/ || (echo "Setting Permissions Failed. Aborting..." &
 sudo usermod -a -G www-data pi || (echo "Adding pi to www-data Failed. Aborting..." && exit 1)
 
 #installing mysql
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password $PASSWORD'
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password $PASSWORD'
+echo 'mysql-server mysql-server/root_password password $PASSWORD' | debconf-set-selections
+echo 'mysql-server mysql-server/root_password_again password $PASSWORD' | debconf-set-selections
 sudo apt-get install -y mysql-server mysql-client || (echo "MySQL Install Failed. Aborting..." && exit 1)
 
 #install phpmyadmin
