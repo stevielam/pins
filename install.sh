@@ -4,20 +4,8 @@ set -e
 PASSWORD=test
 TIMEZONE="America/Los_Angeles"
 
-#TODO: ask for MySQL / phpmyadmin password and update variable
-#while true
-#do
-#    sudo read -s -p "Set Password for MySQL root and PHPMyAdmin root: " PASSWORD
-#    echo sudo read -s -p "Password (again): " PASSWORD2
-#    echo [ "$PASSWORD" = "$PASSWORD2" ] && break
-#    echo "Please try again"
-#done
 
-#echo "Please enter username:"
-#read username
-#echo "Set Password for MySQL root and PHPMyAdmin root: "
 read -p -s 'Choose Password for MySQL root and PHPMyAdmin root > ' PASSWORD1
-#echo "Please repeat the password: "
 read -p -s 'Please repeat the password > ' PASSWORD2
 
 # Check both passwords match
