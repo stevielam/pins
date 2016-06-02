@@ -21,7 +21,7 @@ then
 	git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
 else
 	cd wiringPi
-	git clone origin || (echo "WiringPi Pull Failed. Aborting..." && exit 1)
+	git pull origin || (echo "WiringPi Pull Failed. Aborting..." && exit 1)
 	cd ~
 fi	
 
