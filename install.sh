@@ -75,10 +75,10 @@ sudo apt-get install -y phpmyadmin || (echo "PHPMyAdmin Install Failed. Aborting
 sudo mysql -uroot -p$PASSWORD -e "CREATE DATABASE IF NOT EXISTS pins" || (echo "Creating Database Failed. Aborting..." && exit 1)
 
 #create "auto" table
-sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`auto` ( `id` int(11) NOT NULL AUTO_INCREMENT, `master_enable` tinyint(1) NOT NULL, `monday_en` tinyint(1) NOT NULL, `tuesday_en` tinyint(1) NOT NULL, `wednesday_en` tinyint(1) NOT NULL, `thursday_en` tinyint(1) NOT NULL, `friday_en` tinyint(1) NOT NULL, `saturday_en` tinyint(1) NOT NULL, `sunday_en` tinyint(1) NOT NULL, `start_time` time NOT NULL, `end_time` time NOT NULL, `relay` int(11) NOT NULL, `notes` varchar(255), PRIMARY_KEY(`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;' || (echo "Create 'auto' table Failed. Aborting..." && exit 1) 
+sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`auto` ( `id` int(11) NOT NULL AUTO_INCREMENT, `master_enable` tinyint(1) NOT NULL, `monday_en` tinyint(1) NOT NULL, `tuesday_en` tinyint(1) NOT NULL, `wednesday_en` tinyint(1) NOT NULL, `thursday_en` tinyint(1) NOT NULL, `friday_en` tinyint(1) NOT NULL, `saturday_en` tinyint(1) NOT NULL, `sunday_en` tinyint(1) NOT NULL, `start_time` time NOT NULL, `end_time` time NOT NULL, `relay` int(11) NOT NULL, `notes` varchar(255), PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;' || (echo "Create 'auto' table Failed. Aborting..." && exit 1) 
 
 #create "manual" table
-sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`manual` ( `id` int(11) NOT NULL AUTO_INCREMENT, `mode` varchar(20) NOT NULL, `end_time` time NOT NULL, `relay` int(11) NOT NULL, `notes` varchar(255), PRIMARY_KEY(`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;' || (echo "Create 'manual' table Failed. Aborting..." && exit 1) 
+sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`manual` ( `id` int(11) NOT NULL AUTO_INCREMENT, `mode` varchar(20) NOT NULL, `end_time` time NOT NULL, `relay` int(11) NOT NULL, `notes` varchar(255), PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;' || (echo "Create 'manual' table Failed. Aborting..." && exit 1) 
 
 
 #check if pins exists and delete it, TODO: pull instead of delete
