@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#sudo curl https://raw.githubusercontent.com/stevielam/pins/master/install.sh -o installme.sh && sudo bash installme.sh && sudo rm installme.sh
 
 set -e
 
@@ -7,12 +8,11 @@ set -e
 PASSWORD=test
 TIMEZONE="America/Los_Angeles"
 
+
+#password setup
 read -s -p 'Choose Password for MySQL root and PHPMyAdmin root: ' pw1
-
 printf "\n"
-
 read -s -p 'Please repeat the password: ' pw2
-
 printf "\n"
 
 # Check both passwords match
@@ -22,14 +22,15 @@ else
     PASSWORD=$pw1
 fi
 
+
+#set the timezone
 #TODO: ask for timezone
+sudo echo $TIMEZONE > sudo /etc/timezone
 
 
 #update and upgrade
 (sudo apt-get update && sudo apt-get -y upgrade) || (echo "Upgrade Failed. Aborting..." && exit 1)  
 
-#set the timezone
-sudo echo $TIMEZONE > sudo /etc/timezone
 
 #install git
 sudo apt-get install -y git-core || (echo "Git Install Failed. Aborting..." && exit 1)
@@ -71,6 +72,14 @@ sudo apt-get install -y phpmyadmin || (echo "PHPMyAdmin Install Failed. Aborting
 
 #create database and tables
 #TODO: create database and tables
+sudo mysql -uroot -p$PASSWORD "CREATE DATABASE IF NOT EXISTS 'pins'" || (echo "Creating Database Failed. Aborting..." && exit 1)
+
+#create "auto" table
+sudo mysql -uroot -p$PASSWORD "CREATE TABLE IF NOT EXISTS `pins`.`auto` ( `id` int(11) NOT NULL AUTO_INCREMENT, `master_enable` tinyint(1) NOT NULL, `monday_en` tinyint(1) NOT NULL, `tuesday_en` tinyint(1) NOT NULL, `wednesday_en` tinyint(1) NOT NULL, `thursday_en` tinyint(1) NOT NULL, `friday_en` tinyint(1) NOT NULL, `saturday_en` tinyint(1) NOT NULL, `sunday_en` tinyint(1) NOT NULL, `start_time` time NOT NULL, `end_time` time NOT NULL, `relay` int(11) NOT NULL, `notes` varchar(255), PRIMARY_KEY(`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;"
+
+#create "manual" table
+sudo mysql -uroot -p$PASSWORD "CREATE TABLE IF NOT EXISTS `pins`.`manual` ( `id` int(11) NOT NULL AUTO_INCREMENT, `mode` varchar(20) NOT NULL, `end_time` time NOT NULL, `relay` int(11) NOT NULL, `notes` varchar(255), PRIMARY_KEY(`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;"
+
 
 #check if pins exists and delete it, TODO: pull instead of delete
 if [ -d ~/pins ] 
@@ -81,6 +90,9 @@ fi
 
 #clone pins repo
 git clone https://github.com/stevielam/pins.git || (echo "Pins Clone Failed. Aborting..." && exit 1)
+
+#update config.php with PASSWORD
+#TODO: update config.php with PASSWORD
 
 #configure cron job
 #todo: check if cron job exists, if not then create one for the init and poll scripts
