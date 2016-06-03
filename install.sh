@@ -55,7 +55,7 @@ sudo apt-get install -y apache2 apache2-utils || (echo "Apache Install Failed. A
 sudo chown -R www-data:www-data /var/www/ || (echo "Setting Ownership Failed. Aborting..." && exit 1)
 sudo chmod g+rw -R /var/www/ || (echo "Setting Permissions Failed. Aborting..." && exit 1)
 sudo chmod g+s -R /var/www/ || (echo "Setting Permissions Failed. Aborting..." && exit 1)
-sudo usermod -a -G www-data pi || (echo "Adding pi to www-data Failed. Aborting..." && exit 1)
+#sudo usermod -a -G www-data pi || (echo "Adding pi to www-data Failed. Aborting..." && exit 1)
 
 #installing mysql
 echo "mysql-server mysql-server/root_password password $PASSWORD" | sudo debconf-set-selections
@@ -93,6 +93,8 @@ git clone https://github.com/stevielam/pins.git || (echo "Pins Clone Failed. Abo
 
 #update config.php with PASSWORD
 #TODO: update config.php with PASSWORD
+sudo sed -i '/DB_PASS/ c\define("DB_PASS", "$PASSWORD"); ////this is the MySQL root password /' ~/pins/cron/config.php
+
 
 #configure cron job
 #todo: check if cron job exists, if not then create one for the init and poll scripts
