@@ -36,19 +36,19 @@ sudo echo $TIMEZONE > sudo /etc/timezone
 sudo apt-get install -y git-core || (echo "Git Install Failed. Aborting..." && exit 1)
 
 #check if wiringPi exists and delete it, TODO: pull instead of delete
-if [ -d ~/wiringPi ] 
-then 
-	sudo echo "wiringPi exists. Deleting..."
-	sudo rm -rf wiringPi || (echo "WiringPi Delete Failed. Aborting..." && exit 1) 
-fi
+# if [ -d ~/wiringPi ] 
+# then 
+	# sudo echo "wiringPi exists. Deleting..."
+	# sudo rm -rf wiringPi || (echo "WiringPi Delete Failed. Aborting..." && exit 1) 
+# fi
 
 #Install wiringPi
-git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
+# git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
 
 #build wiringPi
-cd wiringPi
-sudo ./build ||  (echo "Building wiringPi Failed. Aborting..." && exit 1)
-cd ~
+# cd wiringPi
+# sudo ./build ||  (echo "Building wiringPi Failed. Aborting..." && exit 1)
+# cd ~
 
 #installing Apache
 sudo apt-get install -y apache2 apache2-utils || (echo "Apache Install Failed. Aborting..." && exit 1)
