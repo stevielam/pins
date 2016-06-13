@@ -98,11 +98,11 @@ sudo sed -i "/DB_PASS/ c\define(\"DB_PASS\", \"$PASSWORD\"); ////this is the MyS
 
 #configure cron job
 #check if cron jobs exists, if so delete the jobs, if not then create one for the init and poll scripts
-crontab -l | grep -v init.php | crontab -
-crontab -l | grep -v poll.php | crontab -
+crontab -l 2>/dev/null | grep -v init.php | crontab -
+crontab -l 2>/dev/null | grep -v poll.php | crontab -
 
 (
-crontab -l
+crontab -l 2>/dev/null
 cat >> 'EOF'
 #initializes ALL relays to false
 @reboot /usr/bin/php /home/pi/pins/cron/init.php >> /home/pi/pins/cron/init_output 2> /home/pi/pins/cron/init_errors
