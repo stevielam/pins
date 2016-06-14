@@ -98,26 +98,21 @@ sudo sed -i "/DB_PASS/ c\define(\"DB_PASS\", \"$PASSWORD\"); ////this is the MyS
 
 #configure cron job
 #check if cron jobs exists, if so delete the jobs, if not then create one for the init and poll scripts
-if !(crontab -l) then
+if !(crontab -u pi -l) then
 	echo "Crontab not found. Creating  new."
-	echo "#pins" | crontab -
+	echo "\n" | crontab -u pi -
 	echo "Done."
 fi
 
-crontab -l | grep -v init.php | crontab -
-crontab -l | grep -v poll.php | crontab -
+crontab -u pi -l | grep -v init.php | crontab -u pi -
+crontab -u pi -l | grep -v poll.php | crontab -u pi -
 
-(
-crontab -l 
-cat >> 'EOF'
-#initializes ALL relays to false
-@reboot /usr/bin/php /home/pi/pins/cron/init.php >>/home/pi/pins/cron/init_output 2>/home/pi/pins/cron/init_errors
+cmt="#initializes ALL relays to false"
+cmd="@reboot /usr/bin/php /home/pi/pins/cron/init.php >>/home/pi/pins/cron/init_output 2>/home/pi/pins/cron/init_errors"
+( crontab -u pi -l; echo "\n$cmt\n$cmd\n" ) | crontab -u pi -
 
-#checks every minute to see if relay needs to be started from schedule
-* * * * * /usr/bin/php /home/pi/pins/cron/poll.php >>/home/pi/pins/cron/poll_output 2>/home/pi/pins/cron/poll_errors
-
-EOF
-
-) | crontab -
+cmt="#checks every minute to see if relay needs to be started from schedule"
+cmd="* * * * * /usr/bin/php /home/pi/pins/cron/poll.php >>/home/pi/pins/cron/poll_output 2>/home/pi/pins/cron/poll_errors"
+( crontab -u pi -l; echo "\n$cmt\n$cmd\n" ) | crontab -u pi -
 
 exit 0
