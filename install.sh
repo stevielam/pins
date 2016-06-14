@@ -100,7 +100,7 @@ sudo sed -i "/DB_PASS/ c\define(\"DB_PASS\", \"$PASSWORD\"); ////this is the MyS
 #check if cron jobs exists, if so delete the jobs, if not then create one for the init and poll scripts
 if !(crontab -l) then
 	echo "Crontab not found. Creating  new."
-	crontab -
+	echo "#pins" | crontab -
 	echo "Done."
 fi
 
