@@ -36,7 +36,7 @@ sudo echo $TIMEZONE > sudo /etc/timezone
 sudo apt-get install -y git-core || (echo "Git Install Failed. Aborting..." && exit 1)
 
 #check if wiringPi exists and delete it, TODO: pull instead of delete
-if [ -d ~/wiringPi ] 
+if [ -d /home/pi/wiringPi ] 
 then 
 	sudo echo "wiringPi exists. Deleting..."
 	sudo rm -rf wiringPi || (echo "WiringPi Delete Failed. Aborting..." && exit 1) 
