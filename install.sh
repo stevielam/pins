@@ -116,6 +116,8 @@ cat >> 'EOF'
 #checks every minute to see if relay needs to be started from schedule
 * * * * * /usr/bin/php /home/pi/pins/cron/poll.php >>/home/pi/pins/cron/poll_output 2>/home/pi/pins/cron/poll_errors
 
+EOF
+
 ) | crontab -
 
 exit 0
