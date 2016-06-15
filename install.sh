@@ -95,6 +95,7 @@ git clone https://github.com/stevielam/pins.git /home/pi/pins || (echo "Pins Clo
 #TODO: update config.php with PASSWORD
 sudo sed -i "/DB_PASS/ c\define(\"DB_PASS\", \"$PASSWORD\"); ////this is the MySQL root password /" /home/pi/pins/cron/config.php
 
+sudo chown -R pi /home/pi/
 
 #configure cron job
 #check if cron jobs exists, if so delete the jobs, if not then create one for the init and poll scripts
