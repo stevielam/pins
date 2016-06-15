@@ -116,4 +116,6 @@ cmt="#checks every minute to see if relay needs to be started from schedule"
 cmd="* * * * * /usr/bin/php /home/pi/pins/cron/poll.php >>/home/pi/pins/cron/poll_output 2>/home/pi/pins/cron/poll_errors"
 ( crontab -u pi -l; echo -e "\n$cmt\n$cmd\n" ) | crontab -u pi -
 
+echo "BACKEND INSTALLATION COMPLETE. PLEASE REBOOT.... (sudo reboot)"
+
 exit 0
