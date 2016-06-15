@@ -4,9 +4,8 @@
 
 set -e
 
-
 PASSWORD=test
-TIMEZONE="America/Los_Angeles"
+#TIMEZONE="America/Los_Angeles"
 
 
 #password setup
@@ -24,9 +23,9 @@ fi
 
 
 #set the timezone
-#TODO: ask for timezone
-sudo echo $TIMEZONE > sudo /etc/timezone
-
+sudo dpkg-reconfigure tzdata
+#sudo echo $TIMEZONE > sudo /etc/timezone
+#sudo timedatectl set-timezone America/Los_Angeles
 
 #update and upgrade
 (sudo apt-get update && sudo apt-get -y upgrade) || (echo "Upgrade Failed. Aborting..." && exit 1)  
