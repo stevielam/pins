@@ -43,7 +43,7 @@ then
 fi
 
 #Install wiringPi
-git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
+git clone git://git.drogon.net/wiringPi /home/pi/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
 
 #build wiringPi
 cd wiringPi
@@ -82,14 +82,14 @@ sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`manual` ( `
 
 
 #check if pins exists and delete it, TODO: pull instead of delete
-if [ -d ~/pins ] 
+if [ -d /home/pi/pins ] 
 then 
 	sudo echo "pins exists. Deleting..."
 	sudo rm -rf pins || (echo "Pins Delete Failed. Aborting..." && exit 1) 
 fi
 
 #clone pins repo
-git clone https://github.com/stevielam/pins.git || (echo "Pins Clone Failed. Aborting..." && exit 1)
+git clone https://github.com/stevielam/pins.git /hpme/pi/pins || (echo "Pins Clone Failed. Aborting..." && exit 1)
 
 #update config.php with PASSWORD
 #TODO: update config.php with PASSWORD
