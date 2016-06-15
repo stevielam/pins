@@ -39,7 +39,7 @@ sudo apt-get install -y git-core || (echo "Git Install Failed. Aborting..." && e
 if [ -d /home/pi/wiringPi ] 
 then 
 	sudo echo "wiringPi exists. Deleting..."
-	sudo rm -rf wiringPi || (echo "WiringPi Delete Failed. Aborting..." && exit 1) 
+	sudo rm -rf /home/pi/wiringPi || (echo "WiringPi Delete Failed. Aborting..." && exit 1) 
 fi
 
 #Install wiringPi
