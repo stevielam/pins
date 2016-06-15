@@ -89,7 +89,7 @@ then
 fi
 
 #clone pins repo
-git clone https://github.com/stevielam/pins.git /hpme/pi/pins || (echo "Pins Clone Failed. Aborting..." && exit 1)
+git clone https://github.com/stevielam/pins.git /home/pi/pins || (echo "Pins Clone Failed. Aborting..." && exit 1)
 
 #update config.php with PASSWORD
 #TODO: update config.php with PASSWORD
