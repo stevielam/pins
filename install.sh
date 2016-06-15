@@ -93,7 +93,7 @@ git clone https://github.com/stevielam/pins.git /hpme/pi/pins || (echo "Pins Clo
 
 #update config.php with PASSWORD
 #TODO: update config.php with PASSWORD
-sudo sed -i "/DB_PASS/ c\define(\"DB_PASS\", \"$PASSWORD\"); ////this is the MySQL root password /" ~/pins/cron/config.php
+sudo sed -i "/DB_PASS/ c\define(\"DB_PASS\", \"$PASSWORD\"); ////this is the MySQL root password /" /home/pi/pins/cron/config.php
 
 
 #configure cron job
