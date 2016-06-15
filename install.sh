@@ -46,9 +46,9 @@ fi
 git clone git://git.drogon.net/wiringPi /home/pi/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
 
 #build wiringPi
-cd wiringPi
+cd /home/pi/wiringPi
 sudo ./build ||  (echo "Building wiringPi Failed. Aborting..." && exit 1)
-cd ~
+cd /home/pi
 
 #installing Apache
 sudo apt-get install -y apache2 apache2-utils || (echo "Apache Install Failed. Aborting..." && exit 1)
@@ -85,7 +85,7 @@ sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`manual` ( `
 if [ -d /home/pi/pins ] 
 then 
 	sudo echo "pins exists. Deleting..."
-	sudo rm -R pins || (echo "Pins Delete Failed. Aborting..." && exit 1) 
+	sudo rm -R /home/pi/pins || (echo "Pins Delete Failed. Aborting..." && exit 1) 
 fi
 
 #clone pins repo
