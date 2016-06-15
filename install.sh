@@ -85,7 +85,7 @@ sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`manual` ( `
 if [ -d /home/pi/pins ] 
 then 
 	sudo echo "pins exists. Deleting..."
-	sudo rm -rf pins || (echo "Pins Delete Failed. Aborting..." && exit 1) 
+	sudo rm -R pins || (echo "Pins Delete Failed. Aborting..." && exit 1) 
 fi
 
 #clone pins repo
