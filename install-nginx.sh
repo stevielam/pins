@@ -34,52 +34,6 @@ sudo dpkg-reconfigure tzdata
 #install git
 sudo apt-get install -y git-core || (echo "Git Install Failed. Aborting..." && exit 1)
 
-#check if wiringPi exists and delete it, TODO: pull instead of delete
-if [ -d /home/pi/wiringPi ] 
-then 
-	sudo echo "wiringPi exists. Deleting..."
-	sudo rm -R /home/pi/wiringPi || (echo "WiringPi Delete Failed. Aborting..." && exit 1) 
-fi
-
-#Install wiringPi
-git clone git://git.drogon.net/wiringPi /home/pi/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
-
-#build wiringPi
-cd /home/pi/wiringPi
-sudo ./build ||  (echo "Building wiringPi Failed. Aborting..." && exit 1)
-cd /home/pi
-
-#installing Apache
-sudo apt-get install -y apache2 apache2-utils || (echo "Apache Install Failed. Aborting..." && exit 1)
-sudo chown -R www-data:www-data /var/www/ || (echo "Setting Ownership Failed. Aborting..." && exit 1)
-sudo chmod g+rw -R /var/www/ || (echo "Setting Permissions Failed. Aborting..." && exit 1)
-sudo chmod g+s -R /var/www/ || (echo "Setting Permissions Failed. Aborting..." && exit 1)
-sudo usermod -a -G www-data pi || (echo "Adding pi to www-data Failed. Aborting..." && exit 1)
-
-#installing mysql
-echo "mysql-server mysql-server/root_password password $PASSWORD" | sudo debconf-set-selections
-echo "mysql-server mysql-server/root_password_again password $PASSWORD" | sudo debconf-set-selections
-sudo apt-get install -y mysql-server mysql-client || (echo "MySQL Install Failed. Aborting..." && exit 1)
-
-#install phpmyadmin
-echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | sudo debconf-set-selections
-echo "phpmyadmin phpmyadmin/app-password-confirm password $PASSWORD" | sudo debconf-set-selections
-echo "phpmyadmin phpmyadmin/mysql/admin-pass password $PASSWORD" | sudo debconf-set-selections
-echo "phpmyadmin phpmyadmin/mysql/app-pass password $PASSWORD" | sudo debconf-set-selections
-echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | sudo debconf-set-selections
-sudo apt-get install -y phpmyadmin || (echo "PHPMyAdmin Install Failed. Aborting..." && exit 1)
-
-#create database and tables
-#TODO: create database and tables
-sudo mysql -uroot -p$PASSWORD -e "CREATE DATABASE IF NOT EXISTS pins" || (echo "Creating Database Failed. Aborting..." && exit 1)
-
-#create "auto" table TODO: make each 'en' default to 0
-sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`auto` ( `id` int(11) NOT NULL AUTO_INCREMENT, `master_enable` tinyint(1) NOT NULL, `monday_en` tinyint(1) NOT NULL, `tuesday_en` tinyint(1) NOT NULL, `wednesday_en` tinyint(1) NOT NULL, `thursday_en` tinyint(1) NOT NULL, `friday_en` tinyint(1) NOT NULL, `saturday_en` tinyint(1) NOT NULL, `sunday_en` tinyint(1) NOT NULL, `start_time` time NOT NULL, `end_time` time NOT NULL, `relay` int(11) NOT NULL, `notes` varchar(255), PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;' || (echo "Create 'auto' table Failed. Aborting..." && exit 1) 
-
-#create "manual" table
-sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`manual` ( `id` int(11) NOT NULL AUTO_INCREMENT, `mode` varchar(20) NOT NULL, `end_time` time NOT NULL, `relay` int(11) NOT NULL, `notes` varchar(255), PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;' || (echo "Create 'manual' table Failed. Aborting..." && exit 1) 
-
-
 #check if pins exists and delete it, TODO: pull instead of delete
 if [ -d /home/pi/pins ] 
 then 
@@ -94,6 +48,38 @@ git clone https://github.com/stevielam/pins.git /home/pi/pins || (echo "Pins Clo
 sudo sed -i "/DB_PASS/ c\define(\"DB_PASS\", \"$PASSWORD\"); ////this is the MySQL root password /" /home/pi/pins/cron/config.php
 
 sudo chown -R pi /home/pi/
+
+
+#install and build wiringPi
+sudo bash /home/pi/pins/wiringPi/install.sh || (echo "WiringPi install Failed. Aborting..." && exit 1) 
+
+#installing and configuring NGINX
+sudo bash /home/pi/pins/nginx/install.sh || (echo "WiringPi install Failed. Aborting..." && exit 1) 
+
+#installing mysql
+echo "mysql-server mysql-server/root_password password $PASSWORD" | sudo debconf-set-selections
+echo "mysql-server mysql-server/root_password_again password $PASSWORD" | sudo debconf-set-selections
+sudo apt-get install -y mysql-server mysql-client || (echo "MySQL Install Failed. Aborting..." && exit 1)
+
+#install phpmyadmin
+echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | sudo debconf-set-selections
+echo "phpmyadmin phpmyadmin/app-password-confirm password $PASSWORD" | sudo debconf-set-selections
+echo "phpmyadmin phpmyadmin/mysql/admin-pass password $PASSWORD" | sudo debconf-set-selections
+echo "phpmyadmin phpmyadmin/mysql/app-pass password $PASSWORD" | sudo debconf-set-selections
+#echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | sudo debconf-set-selections
+echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | sudo debconf-set-selections
+sudo apt-get install -y phpmyadmin || (echo "PHPMyAdmin Install Failed. Aborting..." && exit 1)
+
+#create database and tables
+#TODO: create database and tables
+sudo mysql -uroot -p$PASSWORD -e "CREATE DATABASE IF NOT EXISTS pins" || (echo "Creating Database Failed. Aborting..." && exit 1)
+
+#create "auto" table TODO: make each 'en' default to 0
+sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`auto` ( `id` int(11) NOT NULL AUTO_INCREMENT, `master_enable` tinyint(1) NOT NULL, `monday_en` tinyint(1) NOT NULL, `tuesday_en` tinyint(1) NOT NULL, `wednesday_en` tinyint(1) NOT NULL, `thursday_en` tinyint(1) NOT NULL, `friday_en` tinyint(1) NOT NULL, `saturday_en` tinyint(1) NOT NULL, `sunday_en` tinyint(1) NOT NULL, `start_time` time NOT NULL, `end_time` time NOT NULL, `relay` int(11) NOT NULL, `notes` varchar(255), PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;' || (echo "Create 'auto' table Failed. Aborting..." && exit 1) 
+
+#create "manual" table
+sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`manual` ( `id` int(11) NOT NULL AUTO_INCREMENT, `mode` varchar(20) NOT NULL, `end_time` time NOT NULL, `relay` int(11) NOT NULL, `notes` varchar(255), PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;' || (echo "Create 'manual' table Failed. Aborting..." && exit 1) 
+
 
 #configure cron job
 #check if cron jobs exists, if so delete the jobs, if not then create one for the init and poll scripts

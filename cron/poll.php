@@ -97,7 +97,7 @@ while(time() < $script_expire){
 			mysqli_free_result($result);
 			
 			
-			//construct ovveride ON query
+			//construct ovveride query
 			$q_override = "
 				SELECT *
 				FROM `relays` 
