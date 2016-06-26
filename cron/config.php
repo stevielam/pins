@@ -3,7 +3,7 @@
 error_reporting(E_ALL); // (debug) Report all errors
 define("GPIO_PATH", "/usr/local/bin");
 
-define("NUMBER_OF_RELAYS", 8); //this will keep track of how many relays there are on your relay board
+define("NUMBER_OF_RELAYS", 16); //this will keep track of how many relays there are on your relay board
 
 define("REVERSE_BIAS", true); //this will keep track if the board is reverse bias of not. The Sainsmart relay boards are usually reverse bias meaning that you must send a logic true to turn them OFF and a logic false to turn them ON.
 
