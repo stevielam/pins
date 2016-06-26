@@ -4,9 +4,8 @@
 
 set -e
 
-
 PASSWORD=test
-TIMEZONE="America/Los_Angeles"
+#TIMEZONE="America/Los_Angeles"
 
 
 #password setup
@@ -24,9 +23,9 @@ fi
 
 
 #set the timezone
-#TODO: ask for timezone
-sudo echo $TIMEZONE > sudo /etc/timezone
-
+sudo dpkg-reconfigure tzdata
+#sudo echo $TIMEZONE > sudo /etc/timezone
+#sudo timedatectl set-timezone America/Los_Angeles
 
 #update and upgrade
 (sudo apt-get update && sudo apt-get -y upgrade) || (echo "Upgrade Failed. Aborting..." && exit 1)  
@@ -36,19 +35,19 @@ sudo echo $TIMEZONE > sudo /etc/timezone
 sudo apt-get install -y git-core || (echo "Git Install Failed. Aborting..." && exit 1)
 
 #check if wiringPi exists and delete it, TODO: pull instead of delete
-# if [ -d ~/wiringPi ] 
-# then 
-	# sudo echo "wiringPi exists. Deleting..."
-	# sudo rm -rf wiringPi || (echo "WiringPi Delete Failed. Aborting..." && exit 1) 
-# fi
+if [ -d /home/pi/wiringPi ] 
+then 
+	sudo echo "wiringPi exists. Deleting..."
+	sudo rm -R /home/pi/wiringPi || (echo "WiringPi Delete Failed. Aborting..." && exit 1) 
+fi
 
 #Install wiringPi
-# git clone git://git.drogon.net/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
+git clone git://git.drogon.net/wiringPi /home/pi/wiringPi || (echo "WiringPi Clone Failed. Aborting..." && exit 1) 
 
 #build wiringPi
-# cd wiringPi
-# sudo ./build ||  (echo "Building wiringPi Failed. Aborting..." && exit 1)
-# cd ~
+cd /home/pi/wiringPi
+sudo ./build ||  (echo "Building wiringPi Failed. Aborting..." && exit 1)
+cd /home/pi
 
 #installing Apache
 sudo apt-get install -y apache2 apache2-utils || (echo "Apache Install Failed. Aborting..." && exit 1)
@@ -82,19 +81,40 @@ sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`manual` ( `
 
 
 #check if pins exists and delete it, TODO: pull instead of delete
-if [ -d ~/pins ] 
+if [ -d /home/pi/pins ] 
 then 
 	sudo echo "pins exists. Deleting..."
-	sudo rm -rf pins || (echo "Pins Delete Failed. Aborting..." && exit 1) 
+	sudo rm -R /home/pi/pins || (echo "Pins Delete Failed. Aborting..." && exit 1) 
 fi
 
 #clone pins repo
-git clone https://github.com/stevielam/pins.git || (echo "Pins Clone Failed. Aborting..." && exit 1)
+git clone https://github.com/stevielam/pins.git /home/pi/pins || (echo "Pins Clone Failed. Aborting..." && exit 1)
 
 #update config.php with PASSWORD
 #TODO: update config.php with PASSWORD
+sudo sed -i "/DB_PASS/ c\define(\"DB_PASS\", \"$PASSWORD\"); ////this is the MySQL root password /" /home/pi/pins/cron/config.php
+
+sudo chown -R pi /home/pi/
 
 #configure cron job
-#todo: check if cron job exists, if not then create one for the init and poll scripts
+#check if cron jobs exists, if so delete the jobs, if not then create one for the init and poll scripts
+if !(crontab -u pi -l) then
+	echo "Crontab not found. Creating  new."
+	echo -e "\n" | crontab -u pi -
+	echo "Done."
+fi
+
+crontab -u pi -l | grep -v init.php | crontab -u pi -
+crontab -u pi -l | grep -v poll.php | crontab -u pi -
+
+cmt="#initializes ALL relays to false"
+cmd="@reboot /usr/bin/php /home/pi/pins/cron/init.php >>/home/pi/pins/cron/init_output 2>/home/pi/pins/cron/init_errors"
+( crontab -u pi -l; echo -e "\n$cmt\n$cmd\n" ) | crontab -u pi -
+
+cmt="#checks every minute to see if relay needs to be started from schedule"
+cmd="* * * * * /usr/bin/php /home/pi/pins/cron/poll.php >>/home/pi/pins/cron/poll_output 2>/home/pi/pins/cron/poll_errors"
+( crontab -u pi -l; echo -e "\n$cmt\n$cmd\n" ) | crontab -u pi -
+
+echo "BACKEND INSTALLATION COMPLETE. PLEASE REBOOT.... (sudo reboot)"
 
 exit 0
