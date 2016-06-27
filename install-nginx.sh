@@ -30,7 +30,6 @@ sudo dpkg-reconfigure tzdata
 #update and upgrade
 (sudo apt-get update && sudo apt-get -y upgrade) || (echo "Upgrade Failed. Aborting..." && exit 1)  
 
-
 #install git
 sudo apt-get install -y git-core || (echo "Git Install Failed. Aborting..." && exit 1)
 
@@ -56,10 +55,58 @@ sudo bash /home/pi/pins/wiringPi/install.sh || (echo "WiringPi install Failed. A
 #installing and configuring NGINX
 sudo bash /home/pi/pins/nginx/install.sh || (echo "WiringPi install Failed. Aborting..." && exit 1) 
 
+sudo chown -R pi:www-data /var/www
+sudo chmod g+rw -R /var/www 
+sudo chmod g+s -R /var/www
+sudo usermod -a -G www-data pi
+
+
 #installing mysql
 echo "mysql-server mysql-server/root_password password $PASSWORD" | sudo debconf-set-selections
 echo "mysql-server mysql-server/root_password_again password $PASSWORD" | sudo debconf-set-selections
 sudo apt-get install -y mysql-server mysql-client || (echo "MySQL Install Failed. Aborting..." && exit 1)
+
+
+#create database and tables
+#TODO: create database and tables
+sudo mysql -uroot -p$PASSWORD -e "CREATE DATABASE IF NOT EXISTS pins" || (echo "Creating Database Failed. Aborting..." && exit 1)
+
+#create "auto" table TODO: make each 'en' default to 0
+# sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`auto` ( `id` int(11) NOT NULL AUTO_INCREMENT, `master_enable` tinyint(1) NOT NULL, `monday_en` tinyint(1) NOT NULL, `tuesday_en` tinyint(1) NOT NULL, `wednesday_en` tinyint(1) NOT NULL, `thursday_en` tinyint(1) NOT NULL, `friday_en` tinyint(1) NOT NULL, `saturday_en` tinyint(1) NOT NULL, `sunday_en` tinyint(1) NOT NULL, `start_time` time NOT NULL, `end_time` time NOT NULL, `relay` int(11) NOT NULL, `notes` varchar(255), PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;' || (echo "Create 'auto' table Failed. Aborting..." && exit 1) 
+
+#create "manual" table
+# sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`manual` ( `id` int(11) NOT NULL AUTO_INCREMENT, `mode` varchar(20) NOT NULL, `end_time` time NOT NULL, `relay` int(11) NOT NULL, `notes` varchar(255), PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;' || (echo "Create 'manual' table Failed. Aborting..." && exit 1) 
+
+
+
+#install the laravel api and configure
+#sudo rm -R /var/www/laravel #remove previous api
+sudo cp -rf /home/pi/pins/api /var/www/laravel #copy new api to previous spot
+
+#create a new env file and configure
+sudo cp /var/www/laravel/.env.example /var/www/laravel/.env
+sudo sed -i "/DB_DATABASE/ c\DB_DATABASE=pins" /var/www/laravel/.env
+sudo sed -i "/DB_USERNAME/ c\DB_USERNAME=root" /var/www/laravel/.env
+sudo sed -i "/DB_PASSWORD/ c\DB_PASSWORD=$PASSWORD" /var/www/laravel/.env
+
+
+#install composer
+#sudo curl -sS https://getcomposer.org/installer | /usr/bin/php
+sudo /home/pi/composer.phar global require "laravel/installer"
+
+
+cd /var/www/laravel
+
+sudo /home/pi/composer.phar install 
+
+sudo php artisan migrate:refresh --seed
+
+cd /home/pi
+
+sudo /etc/init.d/nginx restart
+
+
+
 
 #install phpmyadmin
 echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | sudo debconf-set-selections
@@ -70,15 +117,7 @@ echo "phpmyadmin phpmyadmin/mysql/app-pass password $PASSWORD" | sudo debconf-se
 echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | sudo debconf-set-selections
 sudo apt-get install -y phpmyadmin || (echo "PHPMyAdmin Install Failed. Aborting..." && exit 1)
 
-#create database and tables
-#TODO: create database and tables
-sudo mysql -uroot -p$PASSWORD -e "CREATE DATABASE IF NOT EXISTS pins" || (echo "Creating Database Failed. Aborting..." && exit 1)
 
-#create "auto" table TODO: make each 'en' default to 0
-sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`auto` ( `id` int(11) NOT NULL AUTO_INCREMENT, `master_enable` tinyint(1) NOT NULL, `monday_en` tinyint(1) NOT NULL, `tuesday_en` tinyint(1) NOT NULL, `wednesday_en` tinyint(1) NOT NULL, `thursday_en` tinyint(1) NOT NULL, `friday_en` tinyint(1) NOT NULL, `saturday_en` tinyint(1) NOT NULL, `sunday_en` tinyint(1) NOT NULL, `start_time` time NOT NULL, `end_time` time NOT NULL, `relay` int(11) NOT NULL, `notes` varchar(255), PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;' || (echo "Create 'auto' table Failed. Aborting..." && exit 1) 
-
-#create "manual" table
-sudo mysql -uroot -p$PASSWORD -e 'CREATE TABLE IF NOT EXISTS `pins`.`manual` ( `id` int(11) NOT NULL AUTO_INCREMENT, `mode` varchar(20) NOT NULL, `end_time` time NOT NULL, `relay` int(11) NOT NULL, `notes` varchar(255), PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;' || (echo "Create 'manual' table Failed. Aborting..." && exit 1) 
 
 
 #configure cron job
