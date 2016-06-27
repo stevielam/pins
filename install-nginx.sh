@@ -91,7 +91,7 @@ sudo sed -i "/DB_PASSWORD/ c\DB_PASSWORD=$PASSWORD" /var/www/laravel/.env
 
 
 #install composer
-#sudo curl -sS https://getcomposer.org/installer | /usr/bin/php
+sudo curl -sS https://getcomposer.org/installer | /usr/bin/php
 sudo /home/pi/composer.phar global require "laravel/installer"
 
 
