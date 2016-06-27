@@ -64,7 +64,7 @@ sudo usermod -a -G www-data pi
 #installing mysql
 echo "mysql-server mysql-server/root_password password $PASSWORD" | sudo debconf-set-selections
 echo "mysql-server mysql-server/root_password_again password $PASSWORD" | sudo debconf-set-selections
-sudo apt-get install -y mysql-server mysql-client || (echo "MySQL Install Failed. Aborting..." && exit 1)
+sudo apt-get install -y mysql-server mysql-client php5-mysql || (echo "MySQL Install Failed. Aborting..." && exit 1)
 
 
 #create database and tables
