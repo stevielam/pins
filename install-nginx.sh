@@ -101,6 +101,8 @@ sudo /home/pi/composer.phar install
 
 sudo php artisan migrate:refresh --seed
 
+sudo php artisan key:generate 
+
 cd /home/pi
 
 sudo /etc/init.d/nginx restart
