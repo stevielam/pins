@@ -2,6 +2,8 @@
 
 #sudo curl https://raw.githubusercontent.com/stevielam/pins/master/install.sh -o runme.sh && sudo bash runme.sh && sudo rm runme.sh
 
+#TODO: how to handle existing MySQL and PHPMyAdmin passwords 
+
 set -e
 
 
@@ -93,7 +95,7 @@ git clone https://github.com/stevielam/pins.git || (echo "Pins Clone Failed. Abo
 
 #update config.php with PASSWORD
 #TODO: update config.php with PASSWORD
-sudo sed -i "/DB_PASS/ c\define(\"DB_PASS\", \"$PASSWORD\"); ////this is the MySQL root password /" ~/pins/cron/config.php
+sudo sed -i "/DB_PASS/ c\define(\"DB_PASS\", \"$PASSWORD\"); //this is the MySQL root password" ~/pins/cron/config.php
 
 
 #configure cron job
