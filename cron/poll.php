@@ -33,7 +33,7 @@ while(time() < $script_expire){
 	
 	//Ping DB, reconnect if needed
 	if (mysqli_ping($c)){
-		//TODO: query auto
+		//query auto
 			$day_of_week = strtolower(date('l')); //get current day
 			
 			//query AUTO schedules first
@@ -63,10 +63,68 @@ while(time() < $script_expire){
 			// Free result set
 			mysqli_free_result($result);
 			
-			//TODO: query manual
-				//construct manual query
-				//run query
-				//update the pins array
+			//construct manual query
+			$q_man = "
+				SELECT * 
+				FROM `manual` 
+				WHERE end_time > CURTIME( )
+			";
+			
+			//run query
+			if(!$result=mysqli_query($c,$q_auto)){
+			die(date("M d, Y h:i:sa"). " - Manual Query Error: ". mysqli_error($c));
+			}else{
+				$rows = mysqli_fetch_assoc($result);
+			}
+			
+			//update the pins array
+			if (mysqli_num_rows($result) > 0) {
+				foreach($rows as $row){
+					switch ( trim($row['mode']) ) {
+						case 'on': 
+							$pins[$row['relay']] = true;
+							break;
+						case 'off':
+							$pins[$row['relay']] = false;
+							break;
+						default:
+							break;
+					}
+				}
+			}
+
+			// Free result set
+			mysqli_free_result($result);
+			
+			
+			//construct ovveride query
+			$q_override = "
+				SELECT *
+				FROM `relays` 
+			";
+			
+			//run query
+			if(!$result=mysqli_query($c,$q_auto)){
+			die(date("M d, Y h:i:sa"). " - Override Query Error: ". mysqli_error($c));
+			}else{
+				$rows = mysqli_fetch_assoc($result);
+			}
+			
+			if (mysqli_num_rows($result) > 0) {
+				foreach($rows as $row){
+					switch ( trim($row['mode']) ) {
+						case 'on': 
+							$pins[$row['number']] = true;
+							break;
+						case 'off':
+							$pins[$row['number']] = false;
+							break;
+						default:
+							break;
+					}
+				}
+			}
+			
 	}else{
 		die(date("M d, Y h:i:sa"). " - Failed to ping MySQL Server: " . mysqli_connect_error());
 	}
